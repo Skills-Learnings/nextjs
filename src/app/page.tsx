@@ -1,29 +1,24 @@
+import Link from "next/link"
 import { Suspense } from "react"
 
 async function getTodos() {
-  await wait(2000)
   return fetch("https://jsonplaceholder.typicode.com/todos").then((res) =>
     res.json()
   )
 }
-export default function Home() {
+export default async function Home() {
+  const todos = await getTodos()
   return (
     <>
       <h1>Todos</h1>
-      <Suspense fallback={"Loading..."}>
-        <TodoList />
-      </Suspense>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>
+            <Link href={`todos/${todo.id}`}>{todo.title}</Link>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
 
-async function TodoList() {
-  const todos = await getTodos()
-
-  return <p>{todos.length}</p>
-}
-function wait(duration: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, duration)
-  })
-}
