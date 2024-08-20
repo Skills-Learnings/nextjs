@@ -316,3 +316,112 @@ In Next.js, managing loading states and handling errors effectively is crucial f
 
 6. **Conclusion**
 By organizing our `loading.tsx`, `error.tsx`, and `Suspense` components effectively, we can ensure a smooth user experience even when your app is fetching data or encountering errors.
+### 5. Dynamic Routes
+Dynamic routing in Next.js allows us to create pages that can handle dynamic parameters in the URL, making your application more flexible and scalable.
+
+1. **Dynamic Parameters in Routes**
+	- Next.js enables dynamic routing by using square brackets in the file or folder name. For example, a route like `app/blog/[slug]/page.tsx` can handle URLs like `/blog/my-first-post`. We can access the dynamic parameter (`slug` in this case) directly in our component's function parameters, which is especially useful for fetching data or handling logic based on the route.
+	- Example:
+		```ts
+		// app/blog/[slug]/page.tsx
+		import { notFound } from 'next/navigation';
+
+		export default async function BlogPost({ params }: { params: { slug: string } }) {
+		  const data = await fetchData(params.slug);
+
+		  if (!data) {
+		    notFound();
+		  }
+
+		  return <div>{data.title}</div>;
+		}
+		``` 
+	- In this example, the `params` object is passed directly into the `BlogPost` function, making it easy to use the `slug` parameter to fetch data. If the `fetchData` function returns `null` or `undefined`, the built-in `notFound` function will trigger the 404 page.
+	- One thing to note is that in TypeScript, we need to manually define our parameters. This is a bit tedious but ensures type safety throughout your application.
+2.  **Getting Parameters with `useParams` Hook**
+	- To access dynamic parameters within a child component (called from the `page.tsx`), we can use the `useParams` hook provided by Next.js. This hook allows us to retrieve parameters easily within any part of your component tree.
+	- Example:
+		```ts
+		// app/blog/[slug]/page.tsx
+		import BlogContent from './BlogContent';
+
+		export default function BlogPost() {
+		  return <BlogContent />;
+		}
+
+		// app/blog/[slug]/BlogContent.tsx
+		import { useParams } from 'next/navigation';
+
+		export default function BlogContent() {
+		  const { slug } = useParams();
+		  return <div>Content for {slug}</div>;
+		}
+		``` 
+
+3. **Dynamic URL with Multiple Parameters**
+	- In scenarios where we need to handle multiple parameters in a URL (e.g., `example/1/2/3`), you can achieve this by using nested dynamic routes and destructuring the parameters in our component.
+	- Example:
+		```ts
+		// app/example/[...params]/page.tsx
+		import { useParams } from 'next/navigation';
+
+		export default function ExamplePage() {
+		  const { params } = useParams();
+		  const [param1, param2, param3] = params || [];
+
+		  return (
+		    <div>
+		      <p>Param 1: {param1}</p>
+		      <p>Param 2: {param2}</p>
+		      <p>Param 3: {param3}</p>
+		    </div>
+		  );
+		}
+		``` 
+
+	- In this example, the `params` array will contain all the segments of the URL, allowing us to handle them as needed.
+
+4. **Optional URL Parameters**
+	- We can make a URL parameter optional by enclosing the folder name in an extra set of square brackets. For instance, `[[id]]` would make the `id` parameter optional, allowing the route to match both `/example` and `/example/123`.
+	- **Example:**
+		```ts
+		// app/example/[[id]]/page.tsx
+		export default function ExamplePage({ params }: { params: { id?: string } }) {
+		  const { id } = params;
+		  return <div>{id ? `ID: ${id}` : "No ID provided"}</div>;
+		}
+		``` 
+	- This flexibility makes dynamic routing in Next.js powerful and versatile, allowing us to handle complex routing scenarios with ease.
+5.  **Custom Page Not Found**
+	- When a user navigates to a route that doesn't exist, we can show a custom "Page Not Found" (404) page. This is achieved by creating a `not-found.tsx` file within the relevant directory. If this file is not present, Next.js will fall back to the root layout's error page, which might not provide the most user-friendly experience. A custom 404 page is useful as it helps display the error exactly where it should be, ensuring that the rest of the application remains functional.
+	- **Example:**
+		```ts
+		// app/not-found.tsx
+		export default function NotFound() {
+		  return <div>Oops! Page not found.</div>;
+		}
+		``` 
+6.  **Separate `not-found.tsx` for Specific Pages**
+	- We can create a `not-found.tsx` file within a specific directory to handle 404 errors for that particular route. 
+	- The content of the `layout.tsx` file will be rendered first, followed by the custom not-found page's content. 
+	- If this file is absent, Next.js will display the root layout's error page, bypassing the specific layout entirely.
+	- Having individual not-found pages is particularly helpful when we have a complex UI, as it ensures that the error message only appears in the intended section, while the rest of the UI continues to function normally.
+### Typescript Setup
+Next.js includes a custom TypeScript plugin and type checker, which VSCode and other code editors can use for advanced type-checking and auto-completion.
+
+1.  **Steps to Set Up TypeScript in a Next.js Project**
+	- **Create a New Next.js Project with TypeScript**: When we create a new Next.js project, we can initialize it with TypeScript by selecting the TypeScript option during the setup.    
+	    `npx create-next-app@latest my-project --typescript` 	    
+	 - This command will generate a new Next.js project with TypeScript configuration files like `tsconfig.json` and `next-env.d.ts`.    
+2.  **Install the TypeScript Plugin**: The TypeScript plugin comes pre-bundled with Next.js, so there's no need to install it separately. It is automatically configured when you use TypeScript in your Next.js project. The plugin enhances the development experience by providing better type-checking and auto-completion tailored to Next.js.    
+3.  **Enable the TypeScript Plugin in VS Code**: To make the most of the TypeScript plugin, you'll need to enable it in VS Code. Here’s how you can do that:
+    - **Open VS Code**: Make sure you're using VS Code as your editor.        
+    - Make sure that root folder of next.js is setup as the workspace folder.        
+    - Open VS code command pallet (`Ctrl/⌘` + `Shift` + `P`)
+    - Search for "TypeScript: Select TypeScript Version"
+    - Select "User Workspace version"
+    - Now, when editing files, the custom plugin will be enabled and whill show the specific next.js related TS errors.
+    - For example it will throw error for useState can't be called in the server component in next.js
+4. **Summary**
+By using the TypeScript plugin pre-bundled with Next.js we can significantly improve your development experience in VS Code. The plugin helps by providing enhanced IntelliSense and type-checking that are specifically optimized for Next.js applications.
+        
