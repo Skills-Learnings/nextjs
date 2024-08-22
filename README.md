@@ -1,6 +1,4 @@
-
-
-# Basic Components
+# Introduction and Basics 
 
 ## Topics covered in this section of course
 1. Setting up Next.js Project
