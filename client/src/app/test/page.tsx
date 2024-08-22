@@ -1,14 +1,11 @@
-import { getTodos } from "@/api/api"
+import Link from "next/link"
 
 export default async function Page() {
-  // Full route cache also caches the fetch requests.
-  const todos = await getTodos()
-
-  console.log("Rendering")
-
+  console.log("Rendering test")
   return (
     <>
-      <h1>Test static page</h1>
+      <h1>Page test</h1>
+      <Link href="/">Home</Link>
     </>
   )
 }

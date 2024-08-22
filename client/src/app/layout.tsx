@@ -3,6 +3,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  console.log("Layout")
   return (
     <html lang="en">
       <body>{children}</body>
