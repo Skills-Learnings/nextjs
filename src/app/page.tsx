@@ -1,6 +1,14 @@
-import RandomNumber from "@/components/RandomNumber";
+import Link from "next/link";
 
-export default async function Home() {
-  /* This page will be rendered as dynamic because we have used unstable_noStore in RandomNumber component */
-  return <RandomNumber/>
+export default function Home() {
+  return (
+    <>
+      <h1>Home page</h1>
+      <Link href="/headers">Headers</Link>
+      <br/>
+      <Link href="/cookies">Cookies</Link>
+      <br/>
+      <Link href="/searchparams">Search params</Link>
+    </>
+  )
 }
