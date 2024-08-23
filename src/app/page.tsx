@@ -1,15 +1,6 @@
-import { getTodos } from "@/api/api"
-import MySelect from "@/components/MySelect"
-import TodoList from "@/components/TodoList"
+import RandomNumber from "@/components/RandomNumber";
 
 export default async function Home() {
-  const todos1 = await getTodos()
-  console.log("Home")
-  return (
-    <>
-      <h1>Todos Count: {todos1.length}</h1>
-      <MySelect />
-      <TodoList />
-    </>
-  )
+  /* This page will be rendered as dynamic because we have used unstable_noStore in RandomNumber component */
+  return <RandomNumber/>
 }
