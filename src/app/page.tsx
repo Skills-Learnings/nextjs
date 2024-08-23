@@ -1,17 +1,15 @@
-import { getTodos, getUsers, getTodosLimited } from "@/api/api"
+import { getTodos } from "@/api/api"
+import MySelect from "@/components/MySelect"
 import TodoList from "@/components/TodoList"
 
 export default async function Home() {
   const todos1 = await getTodos()
-  const todos2 = await getTodos()
-  const users = await getUsers()
-  const todosLimitd = await getTodosLimited()
-
+  console.log("Home")
   return (
     <>
-    <h1>Todo Count: {todos1.length}</h1>
-    <h1>Users Count: {users.length}</h1>
-    <TodoList />
+      <h1>Todos Count: {todos1.length}</h1>
+      <MySelect />
+      <TodoList />
     </>
   )
 }
