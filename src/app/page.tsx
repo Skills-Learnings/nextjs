@@ -1,14 +1,15 @@
-import Link from "next/link";
+import { getTodos } from "@/api/api"
 
-export default function Home() {
+export default async function Home() {
+  const todos = await getTodos()
   return (
     <>
-      <h1>Home page</h1>
-      <Link href="/headers">Headers</Link>
-      <br/>
-      <Link href="/cookies">Cookies</Link>
-      <br/>
-      <Link href="/searchparams">Search params</Link>
+      <h1>Todo</h1>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
     </>
   )
 }
