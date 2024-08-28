@@ -20,6 +20,7 @@ export default function PostsPage({
 
       <div className="card-grid">
         <Suspense
+          key={`${query}-${userId}`}
           fallback={
             <SkeletonList amount={6}>
               <SkeletonPostCard />
