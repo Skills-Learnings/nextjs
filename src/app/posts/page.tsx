@@ -1,16 +1,22 @@
 import { getPosts } from "@/db/posts"
-import { getUsers } from "@/db/users"
-import { FormGroup } from "@/components/FormGroup"
 import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { SkeletonList } from "@/components/Skeleton"
 import { Suspense } from "react"
+import SearchForm from "./searchForm"
+import { getUsers } from "@/db/users"
 
-export default function PostsPage() {
+type PostsPageProps = {
+  searchParams: { query?: string; userId?: string }
+}
+
+export default function PostsPage({
+  searchParams: { userId = "", query = "" },
+}: PostsPageProps) {
   return (
     <>
       <h1 className="page-title">Posts</h1>
 
-      <SearchForm />
+      <SearchForm userOptions={<UserSelect />} />
 
       <div className="card-grid">
         <Suspense
@@ -20,39 +26,21 @@ export default function PostsPage() {
             </SkeletonList>
           }
         >
-          <PostGrid />
+          <PostGrid query={query} userId={userId} />
         </Suspense>
       </div>
     </>
   )
 }
 
-async function PostGrid() {
-  const posts = await getPosts()
-
-  return posts.map(post => <PostCard key={post.id} {...post} />)
+type PostGridProps = {
+  query?: string
+  userId?: string | number
 }
 
-function SearchForm() {
-  return (
-    <form className="form mb-4">
-      <div className="form-row">
-        <FormGroup>
-          <label htmlFor="query">Query</label>
-          <input type="search" name="query" id="query" />
-        </FormGroup>
-        <FormGroup>
-          <label htmlFor="userId">Author</label>
-          <select name="userId" id="userId">
-            <Suspense fallback={<option value="">Loading...</option>}>
-              <UserSelect />
-            </Suspense>
-          </select>
-        </FormGroup>
-        <button className="btn">Filter</button>
-      </div>
-    </form>
-  )
+async function PostGrid({ query, userId }: PostGridProps) {
+  const posts = await getPosts({ query, userId })
+  return posts.map((post) => <PostCard key={post.id} {...post} />)
 }
 
 async function UserSelect() {
@@ -61,7 +49,7 @@ async function UserSelect() {
   return (
     <>
       <option value="">Any</option>
-      {users.map(user => (
+      {users.map((user) => (
         <option key={user.id} value={user.id}>
           {user.name}
         </option>

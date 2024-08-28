@@ -5,6 +5,7 @@ import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"
+import { notFound } from "next/navigation"
 
 export default function UserPage({
   params: { userId },
@@ -69,6 +70,8 @@ export default function UserPage({
 
 async function UserDetails({ userId }: { userId: string }) {
   const user = await getUser(userId)
+
+  if (user == null) return notFound()
 
   return (
     <>
