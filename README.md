@@ -1,6 +1,4 @@
-
-
-# Data Handling Fundamental
+# Data Handling Fundamentals
 
 ## Topics covered in this section of course
 1. Data Fetching and Caching
