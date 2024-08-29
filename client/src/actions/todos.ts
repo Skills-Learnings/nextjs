@@ -18,6 +18,6 @@ export async function toggleTodo(id: number, completed: boolean) {
   revalidatePath("/")
 }
 
-function wait(duration:number) {
+export async function wait(duration:number) {
   return new Promise(resolve => setTimeout(resolve, duration))
 }

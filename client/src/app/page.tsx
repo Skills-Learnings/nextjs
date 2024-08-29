@@ -1,4 +1,5 @@
-import SelectAllButton from "@/components/SelectAllButton"
+import { wait } from "@/actions/todos"
+import { TodoForm } from "@/components/TodoForm"
 import { TodoItem } from "@/components/TodoItem"
 import { revalidatePath } from "next/cache"
 
@@ -14,8 +15,17 @@ function getTodos() {
     .then((data) => data as Todo[])
 }
 
-async function createTodo(formData: FormData) {
+async function createTodo(prevState: unknown, formData: FormData) {
   "use server"
+
+  await wait(2000)
+
+  formData.get("title")
+  const title = formData.get("title") as string
+
+  if (title === "") {
+    return { errorMessage: "No title was given" }
+  }
 
   await fetch("http://localhost:3001/todos", {
     method: "POST",
@@ -37,19 +47,7 @@ export default async function Home() {
     <>
       <h1>Todo List</h1>
 
-      <form
-        action={createTodo}
-        style={{
-          display: "flex",
-          gap: ".25rem",
-          flexDirection: "column",
-          maxWidth: "200px",
-        }}
-      >
-        <label htmlFor="title">Title</label>
-        <input type="text" name="title" id="title" />
-        <button>Add</button>
-      </form>
+      <TodoForm createTodo={createTodo} />
 
       <ul>
         {todos.map((todo) => (
