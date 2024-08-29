@@ -1,11 +1,6 @@
-import { cache } from "react"
-import prisma from "./db"
 import { unstable_cache } from "next/cache"
-
-type GetUsersPops = {
-  query: string
-  userId: string
-}
+import prisma from "./db"
+import { cache } from "react"
 
 export const getUsers = unstable_cache(
   cache(async () => {
@@ -25,7 +20,7 @@ export const getUser = unstable_cache(
 )
 
 function wait(duration: number) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, duration)
   })
 }

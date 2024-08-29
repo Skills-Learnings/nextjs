@@ -1,6 +1,6 @@
-import { cache } from "react"
-import prisma from "./db"
 import { unstable_cache } from "next/cache"
+import prisma from "./db"
+import { cache } from "react"
 
 export const getPostComments = unstable_cache(
   cache(async (postId: string | number) => {
@@ -11,7 +11,7 @@ export const getPostComments = unstable_cache(
 )
 
 function wait(duration: number) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, duration)
   })
 }

@@ -78,7 +78,7 @@ async function UserDetails({ userId }: { userId: string }) {
       <h1 className="page-title">{user.name}</h1>
       <div className="page-subtitle">{user.email}</div>
       <div>
-        <b>Company:</b> {user?.companyName}
+        <b>Company:</b> {user.companyName}
       </div>
       <div>
         <b>Website:</b> {user.website}

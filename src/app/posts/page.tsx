@@ -2,59 +2,48 @@ import { getPosts } from "@/db/posts"
 import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { SkeletonList } from "@/components/Skeleton"
 import { Suspense } from "react"
-import SearchForm from "./searchForm"
-import { getUsers } from "@/db/users"
+import { SearchForm } from "./searchForm"
+import Link from "next/link"
+import { UserSelectOptions } from "./userSelectOptions"
 
-type PostsPageProps = {
+type PageProps = {
   searchParams: { query?: string; userId?: string }
 }
 
 export default function PostsPage({
   searchParams: { userId = "", query = "" },
-}: PostsPageProps) {
+}: PageProps) {
   return (
     <>
-      <h1 className="page-title">Posts</h1>
+      <h1 className="page-title">
+        Posts
+        <div className="title-btns">
+          <Link className="btn btn-outline" href="posts/new">
+            New
+          </Link>
+        </div>
+      </h1>
 
-      <SearchForm userOptions={<UserSelect />} />
+      <SearchForm userOptions={<UserSelectOptions withAnyOption />} />
 
       <div className="card-grid">
         <Suspense
-          key={`${query}-${userId}`}
+          key={`${userId}-${query}`}
           fallback={
             <SkeletonList amount={6}>
               <SkeletonPostCard />
             </SkeletonList>
           }
         >
-          <PostGrid query={query} userId={userId} />
+          <PostGrid userId={userId} query={query} />
         </Suspense>
       </div>
     </>
   )
 }
 
-type PostGridProps = {
-  query?: string
-  userId?: string | number
-}
-
-async function PostGrid({ query, userId }: PostGridProps) {
+async function PostGrid({ userId, query }: { userId: string; query: string }) {
   const posts = await getPosts({ query, userId })
-  return posts.map((post) => <PostCard key={post.id} {...post} />)
-}
 
-async function UserSelect() {
-  const users = await getUsers()
-
-  return (
-    <>
-      <option value="">Any</option>
-      {users.map((user) => (
-        <option key={user.id} value={user.id}>
-          {user.name}
-        </option>
-      ))}
-    </>
-  )
+  return posts.map(post => <PostCard key={post.id} {...post} />)
 }

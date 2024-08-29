@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
-import { cache } from "react"
 import { unstable_cache } from "next/cache"
+import { cache } from "react"
 
 export const getPosts = unstable_cache(
   cache(
@@ -12,23 +12,21 @@ export const getPosts = unstable_cache(
       query?: string
       userId?: string | number
     } = {}) => {
-      {
-        await wait(2000)
+      await wait(2000)
 
-        const where: Prisma.PostFindManyArgs["where"] = {}
-        if (query) {
-          where.OR = [
-            { title: { contains: query } },
-            { body: { contains: query } },
-          ]
-        }
-
-        if (userId) {
-          where.userId = Number(userId)
-        }
-
-        return prisma.post.findMany({ where })
+      const where: Prisma.PostFindManyArgs["where"] = {}
+      if (query) {
+        where.OR = [
+          { title: { contains: query } },
+          { body: { contains: query } },
+        ]
       }
+
+      if (userId) {
+        where.userId = Number(userId)
+      }
+
+      return prisma.post.findMany({ where })
     }
   ),
   ["posts"]
@@ -39,7 +37,7 @@ export const getPost = unstable_cache(
     await wait(2000)
     return prisma.post.findUnique({ where: { id: Number(postId) } })
   }),
-  ["post", "postId"]
+  ["posts", "postId"]
 )
 
 export const getUserPosts = unstable_cache(
@@ -50,8 +48,52 @@ export const getUserPosts = unstable_cache(
   ["posts", "userId"]
 )
 
+export function createPost({
+  title,
+  body,
+  userId,
+}: {
+  title: string
+  body: string
+  userId: number
+}) {
+  return prisma.post.create({
+    data: {
+      title,
+      body,
+      userId,
+    },
+  })
+}
+
+export function updatePost(
+  postId: string | number,
+  {
+    title,
+    body,
+    userId,
+  }: {
+    title: string
+    body: string
+    userId: number
+  }
+) {
+  return prisma.post.update({
+    where: { id: Number(postId) },
+    data: {
+      title,
+      body,
+      userId,
+    },
+  })
+}
+
+export function deletePost(postId: string | number) {
+  return prisma.post.delete({ where: { id: Number(postId) } })
+}
+
 function wait(duration: number) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, duration)
   })
 }
