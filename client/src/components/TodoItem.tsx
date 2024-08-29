@@ -1,7 +1,7 @@
 "use client"
 
 import { toggleTodo } from "@/actions/todos"
-import { useTransition } from "react"
+import { useOptimistic, useTransition } from "react"
 
 export function TodoItem({
   id,
@@ -12,19 +12,17 @@ export function TodoItem({
   title: string
   completed: boolean
 }) {
-  const [isPending, startTransition] = useTransition()
+  const [optimisticCompleted, setOptimisticCompleted] = useOptimistic(completed)
 
   return (
     <li>
       <label>
         <input
           type="checkbox"
-          disabled={isPending}
-          checked={completed}
-          onChange={(e) => {
-            startTransition(async() => {
-              await toggleTodo(id, e.target.checked)
-            })
+          checked={optimisticCompleted}
+          onChange={async (e) => {
+            setOptimisticCompleted(e.target.checked)
+            await toggleTodo(id, e.target.checked)
           }}
         />
         {title}

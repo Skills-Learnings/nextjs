@@ -51,7 +51,6 @@ export default async function Home() {
         <button>Add</button>
       </form>
 
-      <SelectAllButton ids={todos.map(todo => todo.id)}/>
       <ul>
         {todos.map((todo) => (
           <TodoItem key={todo.id} {...todo} />
