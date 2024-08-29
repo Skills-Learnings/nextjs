@@ -1,8 +1,9 @@
-import TodoForm from "@/components/TodoForm"
+import SelectAllButton from "@/components/SelectAllButton"
+import { TodoItem } from "@/components/TodoItem"
 import { revalidatePath } from "next/cache"
 
 type Todo = {
-  id: string
+  id: number
   title: string
   completed: boolean
 }
@@ -13,6 +14,21 @@ function getTodos() {
     .then((data) => data as Todo[])
 }
 
+async function createTodo(formData: FormData) {
+  "use server"
+
+  await fetch("http://localhost:3001/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: formData.get("title"),
+      completed: false,
+    }),
+  }).then((res) => res.json())
+  revalidatePath("/")
+}
 
 export default async function Home() {
   const todos = await getTodos()
@@ -20,8 +36,8 @@ export default async function Home() {
   return (
     <>
       <h1>Todo List</h1>
-      {/* Example of server actions with form in server components */}
-      {/* <form
+
+      <form
         action={createTodo}
         style={{
           display: "flex",
@@ -33,13 +49,12 @@ export default async function Home() {
         <label htmlFor="title">Title</label>
         <input type="text" name="title" id="title" />
         <button>Add</button>
-      </form> */}
+      </form>
 
-      {/* Example of server actions with form in client components */}
-      <TodoForm />
+      <SelectAllButton ids={todos.map(todo => todo.id)}/>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
+          <TodoItem key={todo.id} {...todo} />
         ))}
       </ul>
     </>
