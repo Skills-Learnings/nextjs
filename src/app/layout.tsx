@@ -12,12 +12,11 @@ export default function RootLayout({
           style={{ display: "flex", flexDirection: "column", gap: ".25rem" }}
         >
           <Link href="/">Home</Link>
-          <Link href="/test/login">Login</Link>
-          <Link href="/test/signup">Signup</Link>
           <Link href="/team">Team</Link>
-          <Link href="/test/about">About</Link>
+          <Link href="/team/nested">Team Nested</Link>
+          <Link href="/about">About</Link>
           <Link href="/posts">Posts</Link>
-          <Link href="/todos">Todos</Link>
+          <Link href="/posts/1">Post 1</Link>
         </nav>
         {children}
       </body>

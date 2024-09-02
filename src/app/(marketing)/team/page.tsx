@@ -1,3 +1,3 @@
-export default function TeamPage() {
-  return <h1>Team Page</h1>
+export default function TeamNestedPage() {
+  return <h1>Team Nested Page</h1>
 }
