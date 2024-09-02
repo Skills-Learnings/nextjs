@@ -1,0 +1,26 @@
+GET http://localhost:3000/posts
+###
+GET http://localhost:3000/posts?userId=2&query=vero
+###
+POST http://localhost:3000/posts
+Content-Type: : application/json
+
+{
+  "title": "This is a new Post",
+  "body": "New Body",
+  "userId": 2
+}
+###
+GET http://localhost:3000/posts/103
+###
+PUT http://localhost:3000/posts/103
+Content-Type: : application/json
+
+{
+  "title": "This is a new Post - Update",
+  "body": "New Body - Update",
+  "userId": 4
+}
+
+###
+DELETE  http://localhost:3000/posts/103
