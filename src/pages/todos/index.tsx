@@ -1,7 +1,7 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
 import Link from "next/link"
 
-export default function Todo({ todos }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Todo({ todos }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <h1>Todos - {todos.length}</h1>
@@ -16,11 +16,12 @@ export default function Todo({ todos }: InferGetServerSidePropsType<typeof getSe
   )
 }
 
-export const getServerSideProps = (async () => {
+export const getStaticProps = (async () => {
   const data = await fetch("https://jsonplaceholder.typicode.com/todos").then(
     (res) => res.json()
   )
+  console.log("Static")
   return {
     props: { todos: data as any[] },
   }
-}) satisfies GetServerSideProps
+}) satisfies GetStaticProps
