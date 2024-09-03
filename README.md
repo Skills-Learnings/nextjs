@@ -1,40 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Before Getting Started
 
-## Getting Started
+For this project we will be building the same blog style application that we have been working on with the app router, but this time we will be using the pages directory for everything. This pages version of the project will be a simpler version since we will be ignoring all complex loading states since they do not translate well to the pages directory and the way the loading is done is the same as any normal React application so it is not something specific to the pages directory.
 
-First, run the development server:
+The starting code has all the pages you will need already created and mostly implemented. All the JSX is pretty much done for you, but all the data fetching/mutation is left up to you. You will notice many places in the app where the are variables defined such as `const user: any = {}` that are used as placeholders for the data that should be fetched. This is done to minimize the amount of code you actually need to create for this project since writing all the JSX from scratch would be very repetitive. The goal of this project is to implement all the logic and data fetching/mutation for the application so it works the same way as the app router version of the project.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+To get the database working you may need to run the following commands:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. `npm install` - This will install all the dependencies for the project.
+2. `npx prisma db push` - This will create the database and all the tables.
+3. `npx prisma db seed` - This will seed the database with data that is very similar to the data from the API.
+4. You may need to run `npx prisma generate` if you get any errors about missing types. If this doesn't fix the typing errors just run the command `TypeScript: Restart TS Server` in the VSCode command palette or restart VSCode.
+5. `npm run dev` - This will start the development server. There is no need for an API server anymore.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# Database Information
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+All the functions you need to access the database are already created in the `src/db` folder so you shouldn't need to directly interact with the database at all.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Instructions
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Render each route dynamically or statically where appropriate.
+   1. The `/users`, `/users/[userId]`, `/todos`, and `/posts/new` routes should be statically rendered.
+   2. The `/posts`, `/posts/[postId]`, and `/posts/[postId]/edit` routes should be dynamically rendered.
+2. Fetch all the data for each page using the appropriate methods based on how the pages should be rendered.
+3. Ensure the search form on the `/posts` route works as expected.
+4. Add the functionality to create a new post from the `/posts/new` route.
+5. Add the functionality to edit a post from the `/posts/[postId]/edit` route.
+6. Add the functionality to delete a post from the `/posts/[postId]` route.
 
-## Learn More
+## Bonus:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Add loading states to the submits buttons in all the forms that disable the buttons and display alternate text while the form is submitting.
+   1. The new post form
+   2. The edit post form
+   3. The delete post button
+   4. The search form
+2. Ensure all static routes are properly revalidated whenever the data on those pages changes.

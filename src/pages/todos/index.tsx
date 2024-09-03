@@ -1,28 +1,29 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import Link from "next/link";
-import db from "../../db/db";
+import { TodoItem } from "@/components/TodoItem"
+import { getTodos } from "@/db/todos"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
 
-export default function Todos({
+export default function TodosPage({
   todos,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+
   return (
     <>
-      <Link href="/todos/new">New</Link>
+      <h1 className="page-title">Todos</h1>
       <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>
-            <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
-          </li>
+        {todos.map((todo) => (
+          <TodoItem key={todo.id} {...todo} />
         ))}
       </ul>
     </>
-  );
+  )
 }
 
 export const getStaticProps = (async () => {
-  const data = await db.todo.findMany();
+  const todos = await getTodos()
 
   return {
-    props: { todos: data },
-  };
-}) satisfies GetStaticProps;
+    props: {
+      todos,
+    },
+  }
+}) satisfies GetStaticProps

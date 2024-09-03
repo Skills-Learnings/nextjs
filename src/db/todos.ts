@@ -1,13 +1,9 @@
 import prisma from "./db"
 
-export default async function getTodos() {
-    await wait(2000);
+export function getTodos() {
+  return prisma.todo.findMany()
+}
 
-    return prisma.todo.findMany()
-  }
-
-function wait(duration: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, duration)
-  })
+export function getUserTodos(userId: string | number) {
+  return prisma.todo.findMany({ where: { userId: Number(userId) } })
 }
